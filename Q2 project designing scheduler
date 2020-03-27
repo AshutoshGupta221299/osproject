@@ -130,3 +130,4 @@ void rr(int no,int remainingtime[10],int currenttime,int arrivaltime[10], int bu
     printf("\n Average turnaround time = %f\n",avg_tut);
 	
 }
+GS gs
