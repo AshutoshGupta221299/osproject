@@ -1,0 +1,132 @@
+#include<stdio.h> 
+#include<conio.h>
+
+void rr(int no,int remainingtime[10],int currenttime,int arrivaltime[10], int bursttime[10]);
+
+main() 
+{
+	int processnumber,j,no,currtime,remainingprocess,indicator,time_quan,wait,tut,arrivaltime[10],bursttime[10],remainingtime[10],x=1;
+	indicator = 0;
+	wait = 0;
+	tut = 0;
+	printf("Enter number of processes "); 
+	scanf("%d",&no);
+	remainingprocess = no;
+	
+	printf("\nEnter the arrival time and burst time of the processes\n");
+	for(processnumber = 0;processnumber < no;processnumber++) 
+	{
+		printf("\nProcess P%d\n",processnumber+1);
+		printf("Arrival time = "); 
+		scanf("%d",&arrivaltime[processnumber]);
+		printf("Burst time = "); 
+		scanf("%d",&bursttime[processnumber]); 
+		remainingtime[processnumber]=bursttime[processnumber]; 
+	} 
+	printf("The details of time quantum are as follows:\n");
+	printf("The time quantum for first round is 6.\n"); 
+	time_quan=6;
+	currtime=0;
+	for(processnumber=0;remainingprocess!=0;) 
+	{
+		if(remainingtime[processnumber]<=time_quan && remainingtime[processnumber]>0)
+		{ 
+			currtime+=remainingtime[processnumber]; 
+			remainingtime[processnumber]=0; 
+			indicator=1; 
+		} 
+		else if(remainingtime[processnumber]>0)
+		{ 
+			remainingtime[processnumber]-=time_quan; 
+			currtime+=time_quan; 
+		} 
+		if(remainingtime[processnumber]==0 && indicator==1)			
+		{ printf("%d",processnumber);
+			remainingprocess--;				
+			printf("P %d",processnumber+1); 
+			printf("\t\t\t%d",currtime-arrivaltime[processnumber]);
+			printf("\t\t\t%d\n",currtime-bursttime[processnumber]-arrivaltime[processnumber]);
+			wait+=currtime-arrivaltime[processnumber]-bursttime[processnumber]; 
+			tut+=currtime-arrivaltime[processnumber]; 
+			indicator=0; 
+                       
+		} 
+		if(processnumber==no-1){
+			x++;
+			if(x==2){
+				processnumber=0;
+				time_quan=10;
+				
+				printf("The time quantum for second round is 10. \n");
+			}
+			else{
+				break;
+			}
+		}
+		else if(currtime >= arrivaltime[processnumber+1]){
+			processnumber++;
+		}
+		else{
+			processnumber=0;
+		}
+	}
+	
+	rr(no,remainingtime,currtime,arrivaltime,bursttime);
+	
+	return 0;
+}
+
+
+void rr(int no,int remainingtime[10],int currenttime,int arrivaltime[10], int bursttime[10]){
+	
+	float avg_wait,avg_tut;
+    int i,j,n=no,temp,btime[20],processnumber[20],w_time[20],turnaroundtime[20],total=0,loc;
+    
+    printf("Third round with least burst time.\n");
+    
+    for(i=0;i<n;i++)
+    {
+        btime[i]=remainingtime[i];
+        w_time[i]=currenttime-arrivaltime[i]-btime[i];
+		processnumber[i]=i+1;
+    }
+	
+    for(i=0;i<n;i++)
+    {
+        loc=i;
+        for(j=i+1;j<n;j++)
+        {
+            if(btime[j]<btime[loc]){
+            	loc=j;
+            }
+        }
+        temp=btime[i];
+        btime[i]=btime[loc];
+        btime[loc]=temp;
+        temp=processnumber[i];
+        processnumber[i]=processnumber[loc];
+        processnumber[loc]=temp;
+    }
+	
+    for(i=1;i<n;i++)
+    {
+        for(j=0;j<i;j++){
+        	w_time[i]+=btime[j];
+        }
+        total+=w_time[i];
+    }
+ 
+    avg_wait=(float)total/n;
+    total=0;
+    printf("\nProcess\t\tBurst time\t\twaiting time\t\tTurnaround Time");
+    for(i=0;i<n;i++)
+    {
+        turnaroundtime[i]=btime[i]+w_time[i];
+        total=total + turnaroundtime[i];
+        printf("\nP%d\t\t\t%d\t\t\t%d\t\t\t%d",processnumber[i],btime[i],w_time[i],turnaroundtime[i]);
+    }
+    avg_tut=(float)total/n;
+    printf("\n\nAverage waiting time = %f",avg_wait);
+    printf("\n Average turnaround time = %f\n",avg_tut);
+	
+}
