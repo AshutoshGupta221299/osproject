@@ -105,7 +105,7 @@ void rr(int no,int remainingtime[10],int currenttime,int arrivaltime[10], int bu
         btime[loc]=temp;
         temp=processnumber[i];
         processnumber[i]=processnumber[loc];
-        processnumber[loc]=temp;
+        processnumber[loc]=temp
     }
 	
     for(i=1;i<n;i++)
