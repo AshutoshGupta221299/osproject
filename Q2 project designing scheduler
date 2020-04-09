@@ -82,7 +82,7 @@ void rr(int no,int remainingtime[10],int currenttime,int arrivaltime[10], int bu
 	float avg_wait,avg_tut;
     int i,j,n=no,temp,btime[20],processnumber[20],w_time[20],turnaroundtime[20],total=0,loc;
     
-    printf("Third round with least burst time.\n");
+    printf("Third round with most burst time.\n");
     
     for(i=0;i<n;i++)
     {
@@ -96,7 +96,7 @@ void rr(int no,int remainingtime[10],int currenttime,int arrivaltime[10], int bu
         loc=i;
         for(j=i+1;j<n;j++)
         {
-            if(btime[j]<btime[loc]){
+            if(btime[j]>btime[loc]){
             	loc=j;
             }
         }
